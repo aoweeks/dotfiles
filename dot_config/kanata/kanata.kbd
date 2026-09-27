@@ -1,0 +1,29 @@
+(defcfg
+  linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
+  process-unmapped-keys yes
+  concurrent-tap-hold yes
+)
+
+(defsrc
+  caps lmet lsft ralt f23 up down left rght bspc del
+)
+
+(defvirtualkeys
+  slow_release (macro S-f13)
+)
+
+(defalias
+  cap (tap-hold 200 200 pause lmet)
+  lsf (tap-hold 200 200 slck lsft)
+  rag (tap-hold 200 200 ssrq ralt)
+  sup (multi f13 (on-release tap-vkey slow_release))
+  cop (tap-hold 200 200 lmet (multi lctl lsft lalt lmet))
+)
+
+(defchordsv2
+  (lsft lmet f23) @cop 50 first-release ()
+)
+
+(deflayer default
+  @cap @sup @lsf @rag _ f18 f19 f20 f21 f22 f24
+)

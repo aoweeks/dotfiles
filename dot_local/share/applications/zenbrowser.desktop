@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Zen Browser
+Exec=/usr/bin/zen-browser
+Icon=/home/adam/.local/share/icons/everforest/zenbrowser.svg
+Terminal=false
+Type=Application

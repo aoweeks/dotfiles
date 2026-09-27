@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/nomacs
+MimeType=image/png;
+Name=nomacs
+NoDisplay=true
+Type=Application

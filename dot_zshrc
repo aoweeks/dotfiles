@@ -1,0 +1,184 @@
+export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
+
+
+# History
+HISTSIZE=100000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+
+# ### Aliases ###
+
+alias ls='eza --icons=auto --color=auto --group-directories-first'
+
+_ls_depth() {
+  local depth=$1
+  shift # Remove the number from the argument list
+  ls --tree --level="$depth" "$@"
+}
+
+for i in {2..4}; do
+  alias "ls$i"="_ls_depth $i"
+done
+
+alias grep='grep --color=always'
+alias cat='bat --color=always'
+alias tail='tspin'
+alias zi='__zoxide_zi'
+
+alias jqu='jaq'
+alias calc="noglob qalc -c $*"
+
+alias gc='git commit -am'
+alias fuckyeah='thefuck --yeah'
+
+alias mc='micro'
+
+alias define='dict -d wn'
+alias synonym='dict -d moby-thesaurus'
+alias terminology='dict -d foldoc'
+
+alias spell='aspell -a'
+
+alias lj='jrnl -n 1'
+
+alias please='sudo !!'
+
+alias newmac='(
+	sudo ip link set wlan0 down
+	sudo macchanger -r wlan0
+	sudo ip link set wlan0 up
+)'
+
+alias cb='xclip -selection clipboard'
+
+alias sshauth='eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/id_ed25519'
+
+function y() {
+	local tmp cwd; tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd" || builtin true
+	command rm -f -- "$tmp"
+}
+
+# Navigation
+setopt auto_cd
+setopt autopushd
+setopt pushdignoredups
+
+# Automatically do an ls after each cd
+function cd() {
+  if [ -n "$1" ]; then
+    z "$@" && ls
+  else
+   	z ~ && ls
+  fi
+}
+
+alias d='dirs -v | head -10'
+alias popd='cd -'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Misc
+setopt correct
+setopt case_glob
+unset zle_bracketed_paste
+
+
+# alias dadd="dateutils.dadd"
+
+# ### Functions ###
+function mkcd() { mkdir "$1"; cd "$1" }
+
+
+export EDITOR="/usr/bin/micro"
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --ignore-file ~/.gitignore'
+FZF_EVERFOREST_COLORS="--color=bg+:#1E2326,bg:#272E33,spinner:#E69875,hl:#A7C080,fg:#D3C6AA,header:#D699B6,info:#A7C080,pointer:#E69875,marker:#A7C090,fg+:#E69875,prompt:#7FBBB3,hl+:#A7C080,selected-bg:#1E2326,border:#A7C080,label:#A7C080"
+export FZF_DEFAULT_OPTS=$FZF_EVERFOREST_COLORS
+
+# Bat
+export BAT_THEME="Everforest_Dark"
+export MANPAGER="bat -l man -p --paging=always --theme='Monokai Extended'"
+
+
+# Load completions
+autoload -Uz compinit && compinit
+
+
+eval "$(thefuck --alias fuck)"
+eval "$(dircolors -b ~/.dircolors)"
+eval "$(atuin init zsh)"
+eval "$(starship init zsh)"
+eval "$(fzf --zsh)"
+eval "$(sheldon source)"
+eval "$(zoxide init zsh)"
+
+# Configure the zsh-edit plugin (which provides subword/CamelCase navigation)
+# Setting word-chars to empty means it stops at ALL punctuation marks (like / - . _)
+zstyle ':edit:*' word-chars ''
+
+# Explicitly bind common Ctrl+Backspace and Ctrl+Delete sequences to zsh-edit's subword deletion
+bindkey '^W' backward-kill-subword
+bindkey '^H' backward-kill-subword
+bindkey '^[[127;5u' backward-kill-subword
+bindkey '^[[3;5~' kill-subword
+# bindkey '^M' autosuggest-orig-1-forward-subword
+# bindkey '^E' autosuggest-orig-1-backward-subword
+
+# Completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons=always --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --icons=always --color=always $realpath'
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+
+zstyle ':fzf-tab:*' fzf-flags $FZF_EVERFOREST_COLORS
+
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+# give a preview of commandline arguments when completing `kill`
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+  '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+
+zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
+  '(out=$(tldr --color always "$word") 2>/dev/null && echo $out) \
+  || (out=$(MANWIDTH=$FZF_PREVIEW_COLUMNS man "$word") 2>/dev/null && echo $out) \
+  || (out=$(which "$word") && echo $out) || echo "${(P)word}"'
+
+
+# Created by `pipx` on 2026-03-02 15:29:11
+export PATH="$PATH:/home/adam/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/adam/.local/bin:$PATH"

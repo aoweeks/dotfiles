@@ -1,0 +1,86 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "terminal.integrated.tabs.enabled": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.rulers": [
+         79
+    ],
+    "editor.bracketPairColorization.enabled": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.detectIndentation": false,
+   "editor.tabSize": 2,
+  "files.eol": "\n",
+  "npm.keybindingsChangedWarningShown": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.linkedEditing": true,
+  "editor.cursorSmoothCaretAnimation": "explicit",
+  "editor.smoothScrolling": true,
+  "editor.stickyScroll.defaultModel": "foldingProviderModel",
+  "outline.collapseItems": "alwaysCollapse",
+  "outline.problems.enabled": false,
+  "editor.minimap.sectionHeaderFontSize": 16,
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "editor.minimap.markSectionHeaderRegex": "\\bH:\\s*(?<separator>-?)\\s*(?<label>.*)$",
+  "rewrap.autoWrap.enabled": true,
+  "rewrap.doubleSentenceSpacing": true,
+  "rewrap.wrappingColumn": 80,
+  "LPC.languageServer.maxLpcServerMemory": 12000,
+  "LPC.locale": "en",
+  "spellright.notificationClass": "information",
+  "editor.wordWrap": "off",
+  "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_",
+  "editor.fontFamily": "'FiraCode Nerd Font', 'JetBrains Mono', 'Consolas', 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "everforest.italicKeywords": true,
+  "everforest.darkWorkbench": "high-contrast",
+  "editor.inlayHints.fontFamily": "'Fira Sans'",
+  "everforest.lightContrast": "soft",
+  "theme_switcher.dark_theme": "Everforest Dark",
+  "theme_switcher.light_theme": "Aura Soft Dark",
+  "themeSwitcher.preferredDarkTheme": "Everforest Code",
+  "themeSwitcher.preferredLightTheme": "Everforest English",
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
+  "workbench.editor.empty.hint": "hidden",
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.fontLigatures.featureSettings": "\"calt\" on, \"liga\" on, \"dlig\" on",
+  "terminal.integrated.customGlyphs": false,
+  "chat.disableAIFeatures": false,
+  "workbench.activityBar.location": "top",
+  "window.menuBarVisibility": "compact",
+  "window.menuStyle": "custom",
+  "window.titleBarStyle": "native",
+  "everforest.darkContrast": "hard",
+  "everforest.lightWorkbench": "high-contrast",
+  "workbench.colorTheme": "Everforest Code",
+  "workbench.iconTheme": "material-icon-theme-everforest-dark",
+  "projectColors.workspaces": [
+    {
+      "directory": "/home/adam/Documents/code/obsidian-plugins/.obsidian/plugins/spaceless-comments"
+    },
+    {
+      "directory": "/home/adam/Documents/reference/code/obsidian-underscore-italics"
+    },
+    {
+      "directory": "/home/adam/Documents/code/glove80-zmk"
+    },
+    {
+      "directory": "/home/adam/Documents/code/godot/2Dshaders/1 Basics"
+    }
+  ],
+  "window.zoomLevel": 1,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "findJump.jumpChars": "jfdksawibceghlmnoprtuvxyzJFDKSABCEGHILMNOPRTUVWXYZ",
+  "findJump.dimWhenActive": true,
+  "terminal.integrated.initialHint": false,
+   "vscode_custom_css.imports": ["file:///home/adam/.config/VSCodium/User/custom.css"],
+   "workbench.colorCustomizations": {
+     "[Everforest Code]": {
+       "editor.selectionBackground": "#3a514690",
+       "editor.selectionHighlightBackground": "#344f4660",
+       "terminal.selectionBackground": "#3a514690"
+     }
+   }
+}

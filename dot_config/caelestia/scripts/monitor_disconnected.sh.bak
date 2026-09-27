@@ -1,0 +1,15 @@
+#!/bin/bash
+
+notify-send "Success!"
+
+BUILDIN_DISPLAY_NAME="eDP-1"  # Get the name of buildin display using "hyprctl monitors all"
+DEFAULT_BUILDIN_ENABLE="$BUILDIN_DISPLAY_NAME, highresxhighrr, 0x0, 1"
+
+# re-enable buildin monitor
+if [[ -z "$HYPR_BUILDIN_MON" ]]; then
+    # use default settings
+    hyprctl keyword monitor "$DEFAULT_BUILDIN_ENABLE"
+else
+    # use environment settings
+    hyprctl keyword monitor "$HYPR_BUILDIN_MON"
+fi

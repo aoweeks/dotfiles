@@ -1,0 +1,8 @@
+{
+    "Discworld": (
+        host: "discworld.starturtle.net",
+        port: 4242,
+        tls: false,
+        verify_cert: false,
+    ),
+}

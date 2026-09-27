@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# A clean, single script to handle all monitor and lid logic.
+
+LOG="/tmp/hypr_monitor.log"
+BUILDIN_DISPLAY_NAME="eDP-1"
+
+echo "$(date '+%H:%M:%S') manage_monitors.sh called with: $1" >> "$LOG"
+
+start_suspend() {
+    echo "$(date '+%H:%M:%S') Starting 2-minute suspend timer" >> "$LOG"
+    (
+        sleep 120
+        # Check if lid is still closed
+        if grep -q "closed" /proc/acpi/button/lid/*/state 2>/dev/null; then
+            # Check if external monitor is still missing
+            external_count=$(hyprctl monitors -j | jq '[.[] | select(.name != "'"$BUILDIN_DISPLAY_NAME"'")] | length')
+            if [ "$external_count" -eq 0 ]; then
+                # Check if on battery
+                if ! acpi -a | grep -q 'on-line'; then
+                    echo "$(date '+%H:%M:%S') Suspending..." >> "$LOG"
+                    systemctl suspend
+                fi
+            fi
+        fi
+    ) &
+}
+
+migrate_windows() {
+    local target_mon="$1"
+    echo "$(date '+%H:%M:%S') Migrating windows to $target_mon via Lua dispatcher..." >> "$LOG"
+    
+    # Use the safe Lua dispatcher we registered in monitors.lua to bypass Lua parsing bugs
+    # and safely avoid the hyprlock crash.
+    hyprctl dispatch caelestia:migrate_windows "$target_mon"
+}
+
+case "$1" in
+    "lid_close")
+        # Check if an external monitor is connected
+        external_count=$(hyprctl monitors -j | jq '[.[] | select(.name != "'"$BUILDIN_DISPLAY_NAME"'")] | length')
+        if [ "$external_count" -gt 0 ]; then
+            external_mon=$(hyprctl monitors -j | jq -r '.[] | select(.name != "'"$BUILDIN_DISPLAY_NAME"'") | .name' | head -n 1)
+            hyprctl eval "caelestia_migrate_workspaces('$external_mon'); caelestia_focus_monitor('$external_mon')"
+        else
+            start_suspend &
+        fi
+        
+        # Save current brightness percentage and turn off backlight via hardware.
+        SAVED_BRIGHTNESS=$(brightnessctl -d intel_backlight -m | awk -F, '{print $4}')
+        echo "$SAVED_BRIGHTNESS" > "$XDG_RUNTIME_DIR/lid_saved_brightness"
+        echo "$(date '+%H:%M:%S') lid_close: saving brightness=$SAVED_BRIGHTNESS" >> "$LOG"
+        brightnessctl -d intel_backlight s 0 > /dev/null
+        ;;
+        
+    "lid_open")
+        # Give the kernel/ACPI time to finish resuming the hardware, otherwise it clobbers our brightness
+        sleep 1.5
+        
+        # Restore backlight brightness directly. Since we bypassed Caelestia on lid_close,
+        # Caelestia still thinks it's at the original brightness, so they will naturally sync up.
+        if [ -f "$XDG_RUNTIME_DIR/lid_saved_brightness" ]; then
+            RESTORE_VAL=$(cat "$XDG_RUNTIME_DIR/lid_saved_brightness")
+            echo "$(date '+%H:%M:%S') lid_open: restoring brightness=$RESTORE_VAL" >> "$LOG"
+            brightnessctl -d intel_backlight s "$RESTORE_VAL" > /dev/null
+        else
+            brightnessctl -d intel_backlight s 100% > /dev/null
+        fi
+        hyprctl eval "caelestia_focus_monitor('$BUILDIN_DISPLAY_NAME')"
+        ;;
+        
+    "monitor_connected")
+        # If lid is closed, migrate windows to new monitor
+        if grep -q "closed" /proc/acpi/button/lid/*/state 2>/dev/null; then
+            external_mon=$(hyprctl monitors -j | jq -r '.[] | select(.name != "'"$BUILDIN_DISPLAY_NAME"'") | .name' | head -n 1)
+            if [ -n "$external_mon" ]; then
+                hyprctl eval "caelestia_dpms_on('$external_mon')"
+                # Wait for monitor to initialize fully before migrating
+                sleep 2
+                hyprctl eval "caelestia_migrate_workspaces('$external_mon'); caelestia_focus_monitor('$external_mon')"
+            fi
+            # Turn off laptop backlight since lid is closed.
+            # Don't re-save brightness — lid_close already saved the correct pre-close value.
+            brightnessctl -d intel_backlight s 0 > /dev/null
+        fi
+        ;;
+        
+    "monitor_disconnected")
+        if ! grep -q "closed" /proc/acpi/button/lid/*/state 2>/dev/null; then
+            hyprctl eval "caelestia_dpms_on('$BUILDIN_DISPLAY_NAME')"
+        else
+            start_suspend
+        fi
+        ;;
+        
+    "daemon")
+        echo "$(date '+%H:%M:%S') manage_monitors daemon STARTED" >> "$LOG"
+        SOCKET_PATH="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+        
+        # Start socat listener in background
+        if [ -S "$SOCKET_PATH" ]; then
+            socat -U - UNIX-CONNECT:"$SOCKET_PATH" | while read -r line; do
+                if [[ "$line" == "monitoradded"* ]]; then
+                    "$0" monitor_connected &
+                elif [[ "$line" == "monitorremoved"* ]]; then
+                    "$0" monitor_disconnected &
+                fi
+            done &
+            SOCAT_PID=$!
+        else
+            echo "$(date '+%H:%M:%S') Socket not found at $SOCKET_PATH" >> "$LOG"
+        fi
+
+        # Track lid state to avoid redundant calls
+        LID_FILE="/proc/acpi/button/lid/*/state"
+        if grep -q "closed" $LID_FILE 2>/dev/null; then
+            LAST_STATE="closed"
+        else
+            LAST_STATE="open"
+        fi
+
+        while true; do
+            if grep -q "closed" $LID_FILE 2>/dev/null; then
+                current_state="closed"
+            else
+                current_state="open"
+            fi
+            
+            if [ "$current_state" != "$LAST_STATE" ]; then
+                echo "$(date '+%H:%M:%S') Daemon detected lid state change: $current_state" >> "$LOG"
+                if [ "$current_state" == "closed" ]; then
+                    "$0" lid_close &
+                else
+                    "$0" lid_open &
+                fi
+                LAST_STATE="$current_state"
+            fi
+            sleep 1
+        done
+        ;;
+esac

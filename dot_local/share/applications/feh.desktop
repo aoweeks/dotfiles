@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=feh
+Version=1.0
+Type=Application
+Exec=/usr/bin/feh --scale-down
+Terminal=false
+# Icon=/home/adam/.local/share/icons/everforest/firefox.svg
+StartupWMClass=feh
+MimeType=image/jpeg;image/gif;image/png

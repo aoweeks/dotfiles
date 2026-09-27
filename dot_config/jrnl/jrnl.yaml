@@ -1,0 +1,19 @@
+colors:
+  body: none
+  date: yellow
+  tags: red
+  title: green
+default_hour: 9
+default_minute: 0
+editor: /usr/bin/micro
+encrypt: false
+highlight: true
+indent_character: '|'
+journals:
+  default:
+    journal: /home/adam/.local/share/jrnl/journal.txt
+linewrap: 79
+tagsymbols: '#@'
+template: false
+timeformat: '%d/%m/%y %R'
+version: v4.3

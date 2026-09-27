@@ -1,0 +1,35 @@
+[Desktop Entry]
+X-SnapInstanceName=codium
+Name=VSCodium
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+GenericName[ar]=محرر نصوص
+X-SnapAppName=codium
+Exec=/usr/bin/codium 
+Icon=/home/adam/.local/share/icons/everforest/vscodium.svg
+Type=Application
+StartupNotify=false
+StartupWMClass=VSCodium
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;application/x-codium-workspace;
+Actions=new-empty-window;
+Keywords=vscodium;codium;vscode;
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Name[ar]=نافذة فارغة جديدة
+Name[de]=Neues leeres Fenster
+Name[es]=Nueva ventana vacía
+Name[fr]=Nouvelle fenêtre vide
+Name[it]=Nuova finestra vuota
+Name[ja]=新しい空のウィンドウ
+Name[ko]=새 빈 창
+Name[ru]=Новое пустое окно
+Name[zh_CN]=新建空窗口
+Name[zh_TW]=開新空視窗
+X-SnapAppName=codium
+Exec=/usr/bin/codium
+Icon=~/.local/share/icons/everforest/codium.svg
+
+
+; --force-user-env --new-window %F

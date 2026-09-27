@@ -1,0 +1,10 @@
+#!/bin/bash
+
+notify-send "External monitor connected"
+
+BUILDIN_DISPLAY_NAME="eDP-1"  # Get the name of buildin display using "hyprctl monitors all"
+
+hyprctl keyword monitor "$BUILDIN_DISPLAY_NAME, disable"
+wait 5s
+hyprctl keyword monitor "$BUILDIN_DISPLAY_NAME, enable"
+

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Gemini
+Exec=/usr/bin/kitty --class='gemini' -e gemini
+Icon=/home/adam/.local/share/icons/everforest/gemini.svg
+StartupWMClass=gemini
+Terminal=false 
+Type=Application
+Categories=Application;
+
+#[Desktop Entry]
+# --title-placeholder 'Gemini' --app-id 'gemini' -e gemini

@@ -1,0 +1,7 @@
+[plugin]
+deps = []
+
+[[flavor.deps]]
+use = "jcarter/everforest-yazi:everforest-medium-dark"
+rev = "4d43780"
+hash = "e02b415ef8ef28a2ce15dccad0394424"

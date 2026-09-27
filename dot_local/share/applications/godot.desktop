@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Godot
+Exec=/home/adam/applications/godot
+Icon=/home/adam/.local/share/icons/everforest/godot.svg
+Terminal=false
+Type=Application

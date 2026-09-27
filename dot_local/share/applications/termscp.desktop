@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=termscp
+Exec=/usr/bin/rio --title-placeholder 'termscp' --app-id 'termscp' -e termscp
+Icon=/home/adam/.local/share/icons/everforest/termscp.svg
+StartupWMClass=termscp
+Terminal=false 
+Type=Application
+Categories=Application;

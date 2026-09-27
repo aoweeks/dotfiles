@@ -1,0 +1,272 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "ctrl+shift+alt+meta+=",
+    "command": "theme-switcher.switchToPreferredDark"
+  },
+  {
+    "key": "ctrl+shift+alt+d",
+    "command": "-theme-switcher.switchToPreferredDark"
+  },
+  {
+    "key": "ctrl+shift+alt+meta+-",
+    "command": "theme-switcher.switchToPreferredLight"
+  },
+  {
+    "key": "ctrl+shift+alt+l",
+    "command": "-theme-switcher.switchToPreferredLight"
+  },
+  {
+    "key": "shift+o",
+    "command": "C_Cpp.SwitchHeaderSource",
+    "when": "editorTextFocus && editorLangId =~ /^(c|(cuda-)?cpp)$/ && !(config.C_Cpp.intelliSenseEngine =~ /^[dD]isabled$/)"
+  },
+  {
+    "key": "alt+o",
+    "command": "-C_Cpp.SwitchHeaderSource",
+    "when": "editorTextFocus && editorLangId =~ /^(c|(cuda-)?cpp)$/ && !(config.C_Cpp.intelliSenseEngine =~ /^[dD]isabled$/)"
+  },
+  {
+    "key": "alt+e",
+    "command": "workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled"
+  },
+  {
+    "key": "ctrl+shift+e",
+    "command": "-workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled"
+  },
+  {
+    "key": "alt+o",
+    "command": "outline.focus"
+  },
+  {
+    "key": "ctrl+alt+s",
+    "command": "sftp.upload.changedFiles",
+    "when": "sftp.enabled"
+  },
+  {
+    "key": "ctrl+alt+u",
+    "command": "-sftp.upload.changedFiles",
+    "when": "sftp.enabled"
+  },
+  {
+    "key": "ctrl+alt+u",
+    "command": "find-it-faster.findWithinFiles"
+  },
+  {
+    "key": "ctrl+shift+u",
+    "command": "-find-it-faster.findWithinFiles"
+  },
+  {
+    "key": "shift+alt+;",
+    "command": "cursorRedo"
+  },
+  // Toggle between terminal and editor focus
+  {
+    "key":     "ctrl+space",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when":    "terminalFocus"
+  },
+  {
+    "key": "alt+;",
+    "command": "cursorUndo",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "-cursorUndo",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+alt+;",
+    "command": "breadcrumbs.focus",
+    "when": "breadcrumbsPossible && breadcrumbsVisible"
+  },
+  {
+    "key": "ctrl+shift+;",
+    "command": "-breadcrumbs.focus",
+    "when": "breadcrumbsPossible && breadcrumbsVisible"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "findJump.activate"
+  },
+  {
+    "key": "ctrl+;",
+    "command": "-findJump.activate"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "-workbench.action.quickOpen"
+  },
+  {
+    "key": "ctrl+space",
+    "command": "-workbench.action.terminal.sendSequence",
+    "when": "config.terminal.integrated.enableWin32InputMode && terminalFocus && terminalShellIntegrationEnabled && !accessibilityModeEnabled && terminalShellType == 'pwsh'"
+  },
+  {
+    "key": "ctrl+backspace",
+    "command": "-workbench.action.terminal.sendSequence",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "alt+q alt+r",
+    "command": "-jump-extension.select-to-the-end-of-a-word",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+q alt+e",
+    "command": "-jump-extension.select-to-the-start-of-a-word",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+t",
+    "command": "-workbench.action.chat.toggleThinkingContentAccessibleView",
+    "when": "accessibleViewIsShown && chatIsEnabled && accessibleViewCurrentProviderId == 'panelChat'"
+  },
+  {
+    "key": "alt+3",
+    "command": "-workbench.action.openEditorAtIndex3"
+  },
+  {
+    "key": "alt+2",
+    "command": "-workbench.action.openEditorAtIndex2"
+  },
+  {
+    "key": "ctrl+k ctrl+right",
+    "command": "-workbench.action.focusRightGroup"
+  },
+  {
+    "key": "alt+p",
+    "command": "workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "ctrl+2",
+    "command": "-workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "alt+t",
+    "command": "workbench.action.focusLastEditorGroup"
+  },
+  {
+    "key": "alt+f",
+    "command": "workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "ctrl+1",
+    "command": "-workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "alt+d",
+    "command": "gitlens.showQuickRepoStatus",
+    "when": "!gitlens:disabled && config.gitlens.keymap == 'alternate'"
+  },
+  {
+    "key": "alt+s",
+    "command": "-gitlens.showQuickRepoStatus",
+    "when": "!gitlens:disabled && config.gitlens.keymap == 'alternate'"
+  },
+  {
+    "key": "alt+escape",
+    "command": "workbench.action.toggleMaximizeEditorGroup",
+    "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
+  },
+  {
+    "key": "ctrl+k ctrl+m",
+    "command": "-workbench.action.toggleMaximizeEditorGroup",
+    "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
+  },
+  {
+    "key": "alt+4",
+    "command": "-workbench.action.openEditorAtIndex4"
+  },
+  {
+    "key": "alt+5",
+    "command": "-workbench.action.openEditorAtIndex5"
+  },
+  {
+    "key": "alt+6",
+    "command": "-workbench.action.openEditorAtIndex6"
+  },
+  {
+    "key": "alt+4",
+    "command": "workbench.action.openEditorAtIndex4"
+  },
+  {
+    "key": "alt+5",
+    "command": "workbench.action.openEditorAtIndex5"
+  },
+  {
+    "key": "alt+6",
+    "command": "workbench.action.openEditorAtIndex6"
+  },
+  {
+    "key": "alt+2",
+    "command": "workbench.action.openEditorAtIndex2"
+  },
+  {
+    "key": "alt+1",
+    "command": "workbench.action.firstEditorInGroup"
+  },
+  {
+    "key": "alt+1",
+    "command": "-workbench.action.openEditorAtIndex1"
+  },
+  {
+    "key": "alt+3",
+    "command": "workbench.action.openEditorAtIndex3"
+  },
+  {
+    "key": "alt+'",
+    "command": "editor.action.jumpToBracket",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "-editor.action.jumpToBracket",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+'",
+    "command": "editor.action.selectToBracket"
+  },
+  {
+    "key": "ctrl+alt+m",
+    "command": "editor.action.toggleTabFocusMode"
+  },
+  {
+    "key": "ctrl+m",
+    "command": "-editor.action.toggleTabFocusMode"
+  },
+  {
+    "key": "alt+s",
+    "command": "workbench.action.gotoSymbol",
+    "when": "!accessibilityHelpIsShown && !accessibleViewIsShown"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "-workbench.action.gotoSymbol",
+    "when": "!accessibilityHelpIsShown && !accessibleViewIsShown"
+  },
+  {
+    "key": "shift+alt+=",
+    "command": "increaseSearchEditorContextLines",
+    "when": "inSearchEditor"
+  },
+  {
+    "key": "alt+=",
+    "command": "-increaseSearchEditorContextLines",
+    "when": "inSearchEditor"
+  },
+  {
+    "key": "shift+alt+escape",
+    "command": "quickInput.hide",
+    "when": "inQuickInput"
+  },
+  {
+    "key": "alt+escape",
+    "command": "-quickInput.hide",
+    "when": "inQuickInput"
+  }
+]

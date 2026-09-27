@@ -1,0 +1,26 @@
+(defcfg
+  linux-dev-names-include (
+    "Glove80"
+    "Glove80 Keyboard"
+    "Glove80 Left"
+    "Glove80 Right"
+  )
+  process-unmapped-keys yes
+  concurrent-tap-hold yes
+)
+
+(defsrc
+  f13 up down left rght bspc del
+)
+
+(defvirtualkeys
+  slow_release (macro S-f13)
+)
+
+(defalias
+  sup (multi f13 (on-release tap-vkey slow_release))
+)
+
+(deflayer default
+  @sup f18 f19 f20 f21 f22 f24
+)

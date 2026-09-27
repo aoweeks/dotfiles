@@ -1,0 +1,13 @@
+[Unit]
+Description=WiFi Captive Portal Auto-Reconnect Service
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/adam/.local/bin/wifi-portal-reconnect
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

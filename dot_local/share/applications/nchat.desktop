@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=WhatsApp
+Exec=/usr/bin/kitty --class=nchat -e nchat
+Icon=/home/adam/.local/share/icons/everforest/whatsapp.svg
+StartupWMClass=whatsapp
+Terminal=false 
+Type=Application
+Categories=Application;

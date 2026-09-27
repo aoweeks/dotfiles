@@ -1,0 +1,15 @@
+[Desktop Entry]
+X-SnapInstanceName=codium
+Name=VSCodium - URL Handler
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
+X-SnapAppName=url-handler
+Exec=/snap/bin/codium.url-handler --force-user-env --open-url %U
+Icon=/home/adam/.local/share/icons/everforest/vscodium.svg
+Type=Application
+NoDisplay=true
+StartupNotify=true
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=x-scheme-handler/vscodium;
+Keywords=vscodium;codium;vscode;
+

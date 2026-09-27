@@ -1,0 +1,10 @@
+Added these lines to /etc/xdg/quickshell/caelestia/utils/Icons.qml:
+
+        if (name === "audio")
+            return "headphones";
+        if (name === "todo")
+            return "checklist";
+        if (name === "terminal")
+            return "terminal";
+        if (name === "notes")
+            return "notes";

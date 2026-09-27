@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Pomotroid
+Exec=/home/adam/applications/pomotroid
+Icon=/home/adam/.local/share/icons/everforest/godot.svg
+Terminal=false
+Type=Application

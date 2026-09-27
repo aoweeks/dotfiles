@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Discworld MUD
+Exec=/usr/bin/kitty --class 'discworldmud' -e blightmud -c discworld.starturtle.net:4242
+Icon=/home/adam/.local/share/icons/everforest/discworldmud.svg
+StartupWMClass=discworldmud
+Terminal=false 
+Type=Application
+Categories=Application;

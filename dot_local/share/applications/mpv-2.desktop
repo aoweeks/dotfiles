@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/mpv
+MimeType=video/quicktime;
+Name=mpv
+NoDisplay=true
+Type=Application

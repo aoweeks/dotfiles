@@ -1,0 +1,22 @@
+# [plugins.zsh-defer]
+# github = "romkatv/zsh-defer"
+shell = "zsh"
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["*.zsh"]
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+
+[plugins.zsh-edit]
+github = "marlonrichert/zsh-edit"
+
+[plugins.zsh-you-should-use]
+github = "MichaelAquilina/zsh-you-should-use"

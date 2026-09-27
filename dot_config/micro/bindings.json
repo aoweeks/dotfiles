@@ -1,0 +1,12 @@
+{
+    "CtrlH": "DeleteWordLeft",
+    "CtrlDelete": "DeleteWordRight",
+    "CtrlShiftLeft": "SelectWordLeft",
+    "CtrlShiftRight": "SelectWordRight",
+    "CtrlShiftUp": "SelectUp",
+    "CtrlShiftDown": "SelectDown",
+    "ShiftLeft": "SelectLeft",
+    "ShiftRight": "SelectRight",
+    "ShiftUp": "SelectUp",
+    "ShiftDown": "SelectDown"
+}

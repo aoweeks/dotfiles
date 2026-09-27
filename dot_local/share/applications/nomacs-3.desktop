@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/nomacs
+MimeType=video/quicktime;
+Name=nomacs
+NoDisplay=true
+Type=Application

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Discord
+Exec=/usr/bin/rio --title-placeholder '    Discord' --app-id 'discord' -e discordo
+Icon=/home/adam/.local/share/icons/everforest/discord.svg
+StartupWMClass=discord
+Terminal=false 
+Type=Application
+Categories=Application;

@@ -1,0 +1,13 @@
+[Unit]
+Description=Kanata keyboard remapper
+Documentation=https://github.com/jtroo/kanata
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env kanata -c /home/adam/.config/kanata/kanata.kbd
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=sysinit.target
