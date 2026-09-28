@@ -1,6 +1,5 @@
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
 
-
 # History
 HISTSIZE=100000
 HISTFILE=~/.zsh_history
@@ -112,6 +111,11 @@ function mkcd() { mkdir "$1"; cd "$1" }
 
 export EDITOR="/usr/bin/micro"
 
+if [[ $EUID -eq 0 ]]; then
+    export XDG_CACHE_HOME="/root/.cache"
+    export HOME="/root"
+fi
+
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --ignore-file ~/.gitignore'
 FZF_EVERFOREST_COLORS="--color=bg+:#1E2326,bg:#272E33,spinner:#E69875,hl:#A7C080,fg:#D3C6AA,header:#D699B6,info:#A7C080,pointer:#E69875,marker:#A7C090,fg+:#E69875,prompt:#7FBBB3,hl+:#A7C080,selected-bg:#1E2326,border:#A7C080,label:#A7C080"
@@ -176,9 +180,4 @@ zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
   || (out=$(which "$word") && echo $out) || echo "${(P)word}"'
 
 
-# Created by `pipx` on 2026-03-02 15:29:11
-export PATH="$PATH:/home/adam/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
-
-
-# Added by Antigravity CLI installer
-export PATH="/home/adam/.local/bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
