@@ -1,0 +1,12 @@
+{{- define "hash_to_0x" -}}
+  {{- . | lower | replace "#" "0x" -}}
+{{- end -}}
+{{ template "hash_to_0x" .colours.red }}
+{{ template "hash_to_0x" .colours.green }}
+{{ template "hash_to_0x" .colours.yellow }}
+{{ template "hash_to_0x" .colours.blue }}
+{{ template "hash_to_0x" .colours.aqua }}
+{{ template "hash_to_0x" .colours.purple }}
+{{ template "hash_to_0x" .colours.orange }}
+{{ template "hash_to_0x" .colours.grey_2 }}
+{{ template "hash_to_0x" .colours.fg }}

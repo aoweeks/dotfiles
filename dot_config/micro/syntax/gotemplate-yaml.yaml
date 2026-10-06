@@ -1,0 +1,16 @@
+---
+filetype: "gotemplate-yaml"
+
+detect:
+  match: "\\.yaml\\.tmpl$"
+
+# Include all the base TOML highlighting rules first!
+include: "yaml"
+
+# Then overlay the Go Template rules on top
+rules:
+  - constant.string:
+      start: "{{"
+      end: "}}"
+  - statement:
+      match: "\\b(if|else|end|range|with|define|template)\\b"

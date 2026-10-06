@@ -16,7 +16,16 @@ setopt hist_find_no_dups
 
 # ### Aliases ###
 
-alias ls='eza --icons=auto --color=auto --group-directories-first'
+ls() {
+  case "$PWD" in
+    "$HOME/.local/share/chezmoi"*) 
+      command eza --all --icons=auto --color=auto --group-directories-first "$@" 
+      ;;
+    *) 
+      command eza --icons=auto --color=auto --group-directories-first "$@" 
+      ;;
+  esac
+}
 
 _ls_depth() {
   local depth=$1
@@ -135,7 +144,11 @@ eval "$(dircolors -b ~/.dircolors)"
 eval "$(atuin init zsh)"
 eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
+
+# SSH Agent Configuration
+zstyle :omz:plugins:ssh-agent identities id_ed25519
 eval "$(sheldon source)"
+
 eval "$(zoxide init zsh)"
 
 # Configure the zsh-edit plugin (which provides subword/CamelCase navigation)
@@ -181,3 +194,25 @@ zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
 
 
 export PATH="$PATH:$HOME/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
+
+# Dynamically set Kitty background color based on Chezmoi host mapping
+set_kitty_bg() {
+{{- $host_color_name := get .host_colours .chezmoi.hostname | default "purple" }}
+{{- $kitty_bg_color := "" }}
+{{- if hasPrefix "grey_" $host_color_name }}
+  {{- $kitty_bg_color = replace "grey_" "bg_" $host_color_name }}
+{{- else if eq $host_color_name "aqua" }}
+  {{- $kitty_bg_color = "bg_blue" }}
+{{- else if eq $host_color_name "orange" }}
+    {{- $kitty_bg_color = "bg_yellow" }}
+{{- else }}
+  {{- $kitty_bg_color = print "bg_" $host_color_name }}
+{{- end }}
+  if [[ "$USER" == "root" ]]; then
+    printf "\033]11;%s\007" "{{ .colours.bg_red }}"
+  else
+    printf "\033]11;%s\007" "{{ index .colours $kitty_bg_color }}"
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd set_kitty_bg

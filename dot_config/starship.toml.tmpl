@@ -2,28 +2,22 @@
 # Starship - Everforest
 # -------------------------------------------------------------------
 
+{{- $host_bg := get .host_colours .chezmoi.hostname | default "purple" }}
 {{- $fg := "bg_dim" }}
-{{- $bg := "purple" }}
+{{- $bg := $host_bg }}
+{{- $bold := "" }}
 
 {{- if eq .chezmoi.hostname "adam-laptop" }}
-  {{- $fg = "bg0" }}
-  {{- $bg = "gray0" }}
-{{- else if eq .chezmoi.hostname "homeserver" }}
-  {{- $bg = "yellow" }}
-{{- else if eq .chezmoi.hostname "docker-vm" }}
-  {{- $bg = "green" }}
-{{- else if eq .chezmoi.hostname "parents-server" }}
-  {{- $bg = "aqua" }}
-{{- else if eq .chezmoi.hostname "parents-docker-vm" }}
-  {{- $bg = "blue" }}
+  {{- $fg = "bg_dim" }}
 {{- end }}
 
 {{- if eq .chezmoi.username "root" }}
+  {{- $bold = "bold"}}
   {{- $fg = "bg_dim" }}
   {{- $bg = "red" }}
 {{- end }}
 
-{{- $segment_style := printf "fg:%s bg:%s" $fg $bg }}
+{{- $segment_style := printf "%s fg:%s bg:%s" $bold $fg $bg }}
 
 palette = "everforest_dark_hard"
 
@@ -38,16 +32,16 @@ add_newline = true
 # disabled = true
 
 format = """
-[](fg:{{ $bg }})\
+[](fg:{{- $bg }})\
 $os\
 $username\
 $hostname\
-[]( fg:{{ $bg }} bg:bg5)\
+[]( fg:{{- $bg }} bg:bg_5)\
 $directory\
-[](fg:bg5 bg:bg4)\
+[](fg:bg_5 bg:bg_4)\
 $git_branch\
 $git_status\
-[](fg:bg4 bg:bg3)\
+[](fg:bg_4 bg:bg_3)\
 $c\
 $rust\
 $golang\
@@ -57,41 +51,40 @@ $java\
 $kotlin\
 $haskell\
 $python\
-[](fg:bg3 bg:bg2)\
+[](fg:bg_3 bg:bg_2)\
 $docker_context\
-[](fg:bg2 bg:bg1)\
+[](fg:bg_2 bg:bg_1)\
 $time\
-[](fg:bg1)\
+[](fg:bg_1)\
 $line_break$character
 """
 
-# $line_break$character"""
 
 [palettes.everforest_dark_hard]
 # Core foreground/background
-text   = "#D3C6AA" # Foreground
-base   = "#1E2326" # Background 0 (hard)
-mantle = "#272E33" # Background 1
-crust  = "#14191D" # Background Dim
-# Everforest backgrounds & grays
-bg_dim = "#1E2326"
-bg0 = "#272E33"
-bg1 = "#2E383C"
-bg2 = "#374145"
-bg3 = "#414B50"
-bg4 = "#495156"
-bg5 = "#4F5B58"
-gray0 = "#7A8478"
-gray1 = "#859289"
-gray2 = "#9DA9A0"
+text   = "{{ .colours.fg }}" # Foreground
+base   = "{{ .colours.bg_0 }}" # Background 0 (hard)
+mantle = "{{ .colours.bg_1 }}" # Background 1
+crust  = "{{ .colours.bg_dim }}" # Background Dim
+# Everforest backgrounds & greys
+bg_dim = "{{ .colours.bg_dim }}"
+bg_0 = "{{ .colours.bg_0 }}"
+bg_1 = "{{ .colours.bg_1 }}"
+bg_2 = "{{ .colours.bg_2 }}"
+bg_3 = "{{ .colours.bg_3 }}"
+bg_4 = "{{ .colours.bg_4 }}"
+bg_5 = "{{ .colours.bg_5 }}"
+grey_0 = "{{ .colours.grey_0 }}"
+grey_1 = "{{ .colours.grey_1 }}"
+grey_2 = "{{ .colours.grey_2 }}"
 # Everforest accents
-red     = "#E67E80"
-orange  = "#E69875"
-yellow  = "#DBBC7F"
-green   = "#A7C080"
-aqua    = "#83C092"
-blue    = "#7FBBB3"
-purple  = "#D699B6"
+red     = "{{ .colours.red }}"
+orange  = "{{ .colours.orange }}"
+yellow  = "{{ .colours.yellow }}"
+green   = "{{ .colours.green }}"
+aqua    = "{{ .colours.aqua }}"
+blue    = "{{ .colours.blue }}"
+purple  = "{{ .colours.purple }}"
 
 [os]
 disabled = false
@@ -122,7 +115,7 @@ RedHatEnterprise = "󱄛"
 [username]
 show_always = true
 style_user = "{{ $segment_style }}"
-style_root = "bold {{ $segment_style }}"
+style_root = "{{ $segment_style }}"
 format = "[ $user ]($style)"
 
 [hostname]
@@ -131,11 +124,11 @@ ssh_only = false
 disabled = true
 {{- else }}
 disabled = false
-format = "[ @{{ .chezmoi.hostname }} ]({{ $segment_style }})"
+format = "[ @{{- .chezmoi.hostname -}} ]( {{ $segment_style }} )"
 {{- end }}
 
 [directory]
-style = "fg:yellow bg:bg5"
+style = "fg:yellow bg:bg_5"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -149,74 +142,74 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "fg:purple bg:bg4"
+style = "fg:purple bg:bg_4"
 format = "[ $symbol $branch ]($style)"
 
 [git_status]
-style = "bg:bg4"
+style = "bg:bg_4"
 format = '''[([($conflicted$ahead_behind$stashed$modified$staged$renamed$deleted$untracked)]($style)) ]($style)'''
 # Per-segment formatting (only appears if that status exists)
-conflicted = '[ ](fg:red bg:bg4)'
-ahead      = '[${count}](fg:yellow bg:bg4)'
-behind     = '[${count}](fg:yellow bg:bg4)'
-diverged   = '[${ahead_count}${behind_count}](fg:yellow bg:bg4)'
-stashed    = '[ ${count}](fg:aqua bg:bg4)'
-modified   = '[ ${count}](fg:orange bg:bg4)'
-staged     = '[ ${count}](fg:green bg:bg4)'
-renamed    = '[ ${count}](fg:base bg:bg4)'
-deleted    = '[ ${count}](fg:red bg:bg4)'
-untracked  = '[ ${count}](fg:purple bg:bg4)'
+conflicted = '[ ](fg:red bg:bg_4)'
+ahead      = '[${count}](fg:yellow bg:bg_4)'
+behind     = '[${count}](fg:yellow bg:bg_4)'
+diverged   = '[${ahead_count}${behind_count}](fg:yellow bg:bg_4)'
+stashed    = '[ ${count}](fg:aqua bg:bg_4)'
+modified   = '[ ${count}](fg:orange bg:bg_4)'
+staged     = '[ ${count}](fg:green bg:bg_4)'
+renamed    = '[ ${count}](fg:base bg:bg_4)'
+deleted    = '[ ${count}](fg:red bg:bg_4)'
+untracked  = '[ ${count}](fg:purple bg:bg_4)'
 
 [nodejs]
 symbol = ""
 style  = "bg:green"
-format = "[[ $symbol( $version) ](fg:green bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:green bg:bg_3)]($style)"
 
 [python]
 symbol = ""
 style  = "bg:blue"
-format = "[[ $symbol( $version) ](fg:blue bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:blue bg:bg_3)]($style)"
 
 [rust]
 symbol = ""
 style  = "bg:orange"
-format = "[[ $symbol( $version) ](fg:orange bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:orange bg:bg_3)]($style)"
 
 [golang]
 symbol = ""
 style  = "bg:aqua"
-format = "[[ $symbol( $version) ](fg:aqua bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:aqua bg:bg_3)]($style)"
 
 [php]
 symbol = ""
 style  = "bg:purple"
-format = "[[ $symbol( $version) ](fg:purple bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:purple bg:bg_3)]($style)"
 
 [java]
 symbol = ""
 style  = "bg:red"
-format = "[[ $symbol( $version) ](fg:red bg:bg3)]($style)"
+format = "[[ $symbol( $version) ](fg:red bg:bg_3)]($style)"
 
 [kotlin]
 symbol = ""
 style = "bg:aqua"
-format = '[[ $symbol( $version) ](fg:aqua bg:bg3)]($style)'
+format = '[[ $symbol( $version) ](fg:aqua bg:bg_3)]($style)'
 
 [haskell]
 symbol = ""
 style = "bg:aqua"
-format = '[[ $symbol( $version) ](fg:aqua bg:bg3)]($style)'
+format = '[[ $symbol( $version) ](fg:aqua bg:bg_3)]($style)'
 
 [docker_context]
 symbol = ""
-style  = "bg:bg2"
-format = "[[ $symbol $context ](fg:base bg:bg2)]($style)"
+style  = "bg:bg_2"
+format = "[[ $symbol $context ](fg:base bg:bg_2)]($style)"
 
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:bg1"
-format = '[[   $time ](fg:text bg:bg1)]($style)'
+style = "bg:bg_1"
+format = '[[   $time ](fg:text bg:bg_1)]($style)'
 
 [line_break]
 disabled = false

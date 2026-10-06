@@ -20,3 +20,6 @@ github = "marlonrichert/zsh-edit"
 
 [plugins.zsh-you-should-use]
 github = "MichaelAquilina/zsh-you-should-use"
+
+[plugins.ssh-agent]
+github = "bobsoppe/zsh-ssh-agent"

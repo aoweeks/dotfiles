@@ -1,0 +1,71 @@
+# vim:ft=kitty
+
+## name: Everforest Dark Hard
+## author: Emil Löfquist (https://github.com/ewal)
+## license: MIT
+## upstream: https://github.com/ewal/kitty-everforest/blob/master/themes/everforest_dark_hard.conf
+## blurb: Dark (hard) theme based on https://github.com/sainnhe/everforest for Vim.
+
+foreground                      {{ .colours.fg }}
+background                      {{ .colours.bg_0 }}
+selection_foreground            {{ .colours.grey_2 }}
+selection_background            {{ .colours.bg_visual }}
+
+cursor                          {{ .colours.fg }}
+cursor_text_color               {{ .colours.bg_0 }}
+
+url_color                       {{ .colours.blue }}
+
+active_border_color             {{ .colours.green }}
+inactive_border_color           {{ .colours.bg_5 }}
+bell_border_color               {{ .colours.orange }}
+visual_bell_color               none
+
+wayland_titlebar_color          system
+macos_titlebar_color            system
+
+active_tab_background           {{ .colours.bg_0 }}
+active_tab_foreground           {{ .colours.fg }}
+inactive_tab_background         {{ .colours.bg_2 }}
+inactive_tab_foreground         {{ .colours.grey_2 }}
+tab_bar_background              {{ .colours.bg_0 }}
+tab_bar_margin_color            none
+
+mark1_foreground                {{ .colours.bg_0 }}
+mark1_background                {{ .colours.blue }}
+mark2_foreground                {{ .colours.bg_0 }}
+mark2_background                {{ .colours.fg }}
+mark3_foreground                {{ .colours.bg_0 }}
+mark3_background                {{ .colours.purple }}
+
+#: black
+color0                          {{ .colours.bg_2 }}
+color8                          {{ .colours.bg_3 }}
+
+#: red
+color1                          {{ .colours.red }}
+color9                          {{ .colours.red }}
+
+#: green
+color2                          {{ .colours.green }}
+color10                         {{ .colours.green }}
+
+#: yellow
+color3                          {{ .colours.yellow }}
+color11                         {{ .colours.yellow }}
+
+#: blue
+color4                          {{ .colours.blue }}
+color12                         {{ .colours.blue }}
+
+#: magenta
+color5                          {{ .colours.purple }}
+color13                         {{ .colours.purple }}
+
+#: cyan
+color6                          {{ .colours.aqua }}
+color14                         {{ .colours.aqua }}
+
+#: white
+color7                          {{ .colours.grey_1 }}
+color15                         {{ .colours.grey_2 }}

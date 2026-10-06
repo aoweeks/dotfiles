@@ -1,0 +1,27 @@
+# Apps I only want on my laptop, as me
+{{ if or ( ne .chezmoi.hostname "adam-laptop" ) ( ne .chezmoi.username "adam") -}}
+.config/blightmud
+.config/caelestia
+.config/godot
+.config/hypr
+.config/jrnl
+.config/kanata
+.config/kitty
+.config/nchat
+.config/pipewire
+.config/rio
+.config/systemd
+.config/VSCodium
+dot_local
+Projects
+{{ end }}
+
+.config/micro/buffers/**
+.config/micro/backups/**
+.config/micro/colorschemes/catppuccin*
+
+.config/thunderbird/**/lock
+.config/thunderbird/**/.parentlock
+.config/thunderbird/cxwntatu.default-release
+
+.config/kitty/current-theme.conf
