@@ -4,6 +4,10 @@ local home = os.getenv("HOME")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 hl.config({
+    exec_once = {
+        "[workspace special:communication silent] kitty --class nchat -e nchat",
+    },
+    
     input = {
         kb_layout   = "gb",
         kb_options  = "caps:hyper, fkeys:basic_13-24",

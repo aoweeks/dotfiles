@@ -36,7 +36,7 @@ format = """
 $os\
 $username\
 $hostname\
-[]( fg:{{- $bg }} bg:bg_5)\
+[█]( fg:{{- $bg }} bg:bg_5)\
 $directory\
 [](fg:bg_5 bg:bg_4)\
 $git_branch\
@@ -116,12 +116,12 @@ RedHatEnterprise = "󱄛"
 show_always = true
 style_user = "{{ $segment_style }}"
 style_root = "{{ $segment_style }}"
-format = "[ $user ]($style)"
+format = "[$user]($style)"
 
 [hostname]
 ssh_only = true
 disabled = false
-format = "[ @{{ .chezmoi.hostname }} ]( {{ $segment_style }} )"
+format = "[@{{ .chezmoi.hostname }}]( {{ $segment_style }} )"
 
 [directory]
 style = "fg:yellow bg:bg_5"
