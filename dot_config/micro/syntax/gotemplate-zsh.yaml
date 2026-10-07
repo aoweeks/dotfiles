@@ -2,7 +2,7 @@
 filetype: "gotemplate-zsh"
 
 detect:
-  match: "\\.zshrc\\.tmpl$"
+  filename: "dot_zshrc\\.tmpl$"
 
 # Include all the base TOML highlighting rules first!
 include: "zsh"

@@ -119,13 +119,9 @@ style_root = "{{ $segment_style }}"
 format = "[ $user ]($style)"
 
 [hostname]
-ssh_only = false
-{{- if eq .chezmoi.hostname "adam-laptop" }}
-disabled = true
-{{- else }}
+ssh_only = true
 disabled = false
-format = "[ @{{- .chezmoi.hostname -}} ]( {{ $segment_style }} )"
-{{- end }}
+format = "[ @{{ .chezmoi.hostname }} ]( {{ $segment_style }} )"
 
 [directory]
 style = "fg:yellow bg:bg_5"

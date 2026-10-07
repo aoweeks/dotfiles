@@ -70,6 +70,18 @@ alias cb='xclip -selection clipboard'
 
 alias sshauth='eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/id_ed25519'
 
+function ssh() {
+  # Change background to a default "unmanaged remote" color before connecting
+  printf "\033]11;%s\007" "{{ .colours.bg_purple }}"
+  command ssh "$@"
+  # When disconnected, your local precmd (set_kitty_bg) will automatically run and restore your local color!
+}
+
+function telnet() {
+  printf "\033]11;%s\007" "{{ .colours.bg_purple }}"
+  command telnet "$@"
+}
+
 function y() {
 	local tmp cwd; tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
 	command yazi "$@" --cwd-file="$tmp"
@@ -208,7 +220,7 @@ set_kitty_bg() {
 {{- else }}
   {{- $kitty_bg_color = print "bg_" $host_color_name }}
 {{- end }}
-  if [[ "$USER" == "root" ]]; then
+  if [[ $EUID -eq 0 ]]; then
     printf "\033]11;%s\007" "{{ .colours.bg_red }}"
   else
     printf "\033]11;%s\007" "{{ index .colours $kitty_bg_color }}"

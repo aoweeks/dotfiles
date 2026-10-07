@@ -2,10 +2,10 @@
 filetype: "gotemplate-toml"
 
 detect:
-  match: "\\.toml\\.tmpl$"
+  match: "\\.conf\\.tmpl$"
 
 # Include all the base TOML highlighting rules first!
-include: "toml"
+include: "ini"
 
 # Then overlay the Go Template rules on top
 rules:
