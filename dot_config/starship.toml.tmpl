@@ -119,7 +119,11 @@ style_root = "{{ $segment_style }}"
 format = "[ $user]($style)"
 
 [hostname]
+{{- if eq .chezmoi.hostname "adam-laptop" }}
 ssh_only = true
+{{- else }}
+ssh_only = false
+{{- end }}
 disabled = false
 format = "[@{{ .chezmoi.hostname }}]( {{ $segment_style }} )"
 
