@@ -4,13 +4,11 @@ filetype: "gotemplate-toml"
 detect:
   match: "\\.conf\\.tmpl$"
 
-# Include all the base TOML highlighting rules first!
-include: "ini"
-
 # Then overlay the Go Template rules on top
 rules:
+  - include: "ini"
   - constant.string:
       start: "{{"
       end: "}}"
-  - statement:
-      match: "\\b(if|else|end|range|with|define|template)\\b"
+      rules:
+        - statement: "\\b(if|else|end|range|with|define|template)\\b"

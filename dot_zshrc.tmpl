@@ -142,6 +142,7 @@ function mkcd() { mkdir "$1"; cd "$1" }
 
 
 export EDITOR="/usr/bin/micro"
+export MICRO_TRUECOLOR=1
 
 if [[ $EUID -eq 0 ]]; then
     export XDG_CACHE_HOME="/root/.cache"
