@@ -1,3 +1,13 @@
+{{- $cursor_bg := .colours.bg_2 -}}
+{{- $status_bg := .colours.bg_green -}}
+{{- $selection_bg := .colours.bg_3 -}}
+
+{{- if or (ne .chezmoi.hostname "adam-laptop") (eq .chezmoi.username "root") -}}
+  {{- $cursor_bg = .colours.bg_dim -}}
+  {{- $status_bg = .colours.bg_dim -}}
+  {{- $selection_bg = .colours.bg_dim -}}
+{{- end -}}
+
 color-link default "{{ .colours.fg }},default"
 color-link comment "{{ .colours.grey_1 }},default"
 color-link symbol "{{ .colours.blue }},default"
@@ -18,10 +28,10 @@ color-link diff-deleted "{{ .colours.red }}"
 color-link gutter-error "{{ .colours.red }},default"
 color-link gutter-warning "{{ .colours.blue }},default"
 color-link line-number "{{ .colours.grey_2 }},default"
-color-link current-line-number "{{ .colours.fg }},{{ .colours.bg_2 }}"
-color-link cursor-line "{{ .colours.bg_2 }}"	
-color-link color-column "{{ .colours.bg_green }}"
-color-link statusline "{{ .colours.grey_2 }},{{ .colours.bg_green }}"
-color-link tabbar "{{ .colours.grey_2 }},{{ .colours.bg_green }}"
+color-link current-line-number "{{ .colours.fg }},{{ $cursor_bg }}"
+color-link cursor-line "{{ $cursor_bg }}"	
+color-link color-column "{{ $status_bg }}"
+color-link statusline "{{ .colours.grey_2 }},{{ $status_bg }}"
+color-link tabbar "{{ .colours.grey_2 }},{{ $status_bg }}"
 color-link todo "{{ .colours.orange }},default"
-color-link selection "{{ .colours.fg }},{{ .colours.bg_3 }}"
+color-link selection "{{ .colours.fg }},{{ $selection_bg }}"
