@@ -150,12 +150,8 @@ fi
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --ignore-file ~/.gitignore'
-if [[ $EUID -eq 0 ]]; then
-  FZF_BG_COLOR="{{ .colours.bg_red }}"
-else
-  FZF_BG_COLOR="{{ index .colours $kitty_bg_color }}"
-fi
-FZF_EVERFOREST_COLORS="--color=bg+:{{ .colours.bg_dim }},bg:${FZF_BG_COLOR},spinner:{{ .colours.orange }},hl:{{ .colours.green }},fg:{{ .colours.fg }},header:{{ .colours.purple }},info:{{ .colours.green }},pointer:{{ .colours.orange }},marker:{{ .colours.green }},fg+:{{ .colours.orange }},prompt:{{ .colours.blue }},hl+:{{ .colours.green }},selected-bg:{{ .colours.bg_dim }},border:{{ .colours.green }},label:{{ .colours.green }}"
+# fzf uses bg:-1 to inherit the terminal's dynamic background color perfectly
+FZF_EVERFOREST_COLORS="--color=bg+:{{ .colours.bg_dim }},bg:-1,spinner:{{ .colours.orange }},hl:{{ .colours.green }},fg:{{ .colours.fg }},header:{{ .colours.purple }},info:{{ .colours.green }},pointer:{{ .colours.orange }},marker:{{ .colours.green }},fg+:{{ .colours.orange }},prompt:{{ .colours.blue }},hl+:{{ .colours.green }},selected-bg:{{ .colours.bg_dim }},border:{{ .colours.green }},label:{{ .colours.green }}"
 export FZF_DEFAULT_OPTS=$FZF_EVERFOREST_COLORS
 
 # Bat
