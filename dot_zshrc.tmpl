@@ -1,3 +1,14 @@
+{{- $host_color_name := get .host_colours .chezmoi.hostname | default "purple" -}}
+{{- $kitty_bg_color := "" -}}
+{{- if hasPrefix "grey_" $host_color_name -}}
+  {{- $kitty_bg_color = replace "grey_" "bg_" $host_color_name -}}
+{{- else if eq $host_color_name "aqua" -}}
+  {{- $kitty_bg_color = "bg_blue" -}}
+{{- else if eq $host_color_name "orange" -}}
+  {{- $kitty_bg_color = "bg_yellow" -}}
+{{- else -}}
+  {{- $kitty_bg_color = print "bg_" $host_color_name -}}
+{{- end -}}
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
 
 # History
@@ -139,7 +150,12 @@ fi
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --ignore-file ~/.gitignore'
-FZF_EVERFOREST_COLORS="--color=bg+:#1E2326,bg:#272E33,spinner:#E69875,hl:#A7C080,fg:#D3C6AA,header:#D699B6,info:#A7C080,pointer:#E69875,marker:#A7C090,fg+:#E69875,prompt:#7FBBB3,hl+:#A7C080,selected-bg:#1E2326,border:#A7C080,label:#A7C080"
+if [[ $EUID -eq 0 ]]; then
+  FZF_BG_COLOR="{{ .colours.bg_red }}"
+else
+  FZF_BG_COLOR="{{ index .colours $kitty_bg_color }}"
+fi
+FZF_EVERFOREST_COLORS="--color=bg+:{{ .colours.bg_dim }},bg:${FZF_BG_COLOR},spinner:{{ .colours.orange }},hl:{{ .colours.green }},fg:{{ .colours.fg }},header:{{ .colours.purple }},info:{{ .colours.green }},pointer:{{ .colours.orange }},marker:{{ .colours.green }},fg+:{{ .colours.orange }},prompt:{{ .colours.blue }},hl+:{{ .colours.green }},selected-bg:{{ .colours.bg_dim }},border:{{ .colours.green }},label:{{ .colours.green }}"
 export FZF_DEFAULT_OPTS=$FZF_EVERFOREST_COLORS
 
 # Bat
@@ -209,17 +225,6 @@ export PATH="$PATH:$HOME/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
 
 # Dynamically set Kitty background color based on Chezmoi host mapping
 set_kitty_bg() {
-{{- $host_color_name := get .host_colours .chezmoi.hostname | default "purple" }}
-{{- $kitty_bg_color := "" }}
-{{- if hasPrefix "grey_" $host_color_name }}
-  {{- $kitty_bg_color = replace "grey_" "bg_" $host_color_name }}
-{{- else if eq $host_color_name "aqua" }}
-  {{- $kitty_bg_color = "bg_blue" }}
-{{- else if eq $host_color_name "orange" }}
-    {{- $kitty_bg_color = "bg_yellow" }}
-{{- else }}
-  {{- $kitty_bg_color = print "bg_" $host_color_name }}
-{{- end }}
   if [[ $EUID -eq 0 ]]; then
     printf "\033]11;%s\007" "{{ .colours.bg_red }}"
   else
