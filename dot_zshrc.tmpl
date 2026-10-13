@@ -10,6 +10,7 @@
   {{- $kitty_bg_color = print "bg_" $host_color_name -}}
 {{- end -}}
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
+ALWAYS_SHOW_HIDDEN=("$HOME/.local/share/chezmoi" "$HOME/.config")
 
 # History
 HISTSIZE=100000
@@ -28,14 +29,21 @@ setopt hist_find_no_dups
 # ### Aliases ###
 
 ls() {
-  case "$PWD" in
-    "$HOME/.local/share/chezmoi"*) 
-      command eza --all --icons=auto --color=auto --group-directories-first "$@" 
-      ;;
-    *) 
-      command eza --icons=auto --color=auto --group-directories-first "$@" 
-      ;;
-  esac
+  local eza_args=(--icons=auto --color=auto --group-directories-first)
+  local show_hidden=false
+
+  for dir in "${ALWAYS_SHOW_HIDDEN[@]}"; do
+    if [[ "$PWD" == "$dir"* ]]; then
+      show_hidden=true
+      break
+    fi
+  done
+
+  if $show_hidden; then
+    eza_args=(--all "${eza_args[@]}")
+  fi
+
+  command eza "${eza_args[@]}" "$@"
 }
 
 _ls_depth() {
@@ -43,6 +51,8 @@ _ls_depth() {
   shift # Remove the number from the argument list
   ls --tree --level="$depth" "$@"
 }
+
+alias la='ls -la'
 
 for i in {2..4}; do
   alias "ls$i"="_ls_depth $i"
@@ -132,7 +142,7 @@ alias ....='cd ../../..'
 # Misc
 setopt correct
 setopt case_glob
-unset zle_bracketed_paste
+# unset zle_bracketed_paste
 
 
 # alias dadd="dateutils.dadd"
@@ -170,8 +180,11 @@ eval "$(atuin init zsh)"
 eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
 
-# SSH Agent Configuration
-zstyle :omz:plugins:ssh-agent identities id_ed25519
+# SSH Agent (systemd socket-activated)
+if [[ -z "$SSH_CONNECTION" ]]; then
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
+fi
+
 eval "$(sheldon source)"
 
 eval "$(zoxide init zsh)"
