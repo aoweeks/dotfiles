@@ -60,6 +60,7 @@ done
 
 alias grep='grep --color=always'
 alias cat='bat --color=always'
+alias feline='\cat'
 alias tail='tspin'
 alias zi='__zoxide_zi'
 
@@ -92,8 +93,23 @@ alias cb='xclip -selection clipboard'
 alias sshauth='eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/id_ed25519'
 
 function ssh() {
-  # Change background to a default "unmanaged remote" color before connecting
-  printf "\033]11;%s\007" "{{ .colours.bg_purple }}"
+  # Extract target hostname (last argument, with any user@ prefix stripped)
+  local target="${@: -1}"
+  local host="${target#*@}"
+
+  # Match against known hosts from .chezmoidata.toml, fallback to bg_purple for unknown remotes
+  case "$host" in
+{{- range $h, $c := .host_colours }}
+{{-   $bg := print "bg_" $c -}}
+{{-   if hasPrefix "grey_" $c }}{{ $bg = replace "grey_" "bg_" $c }}
+{{-   else if eq $c "aqua" }}{{ $bg = "bg_blue" }}
+{{-   else if eq $c "orange" }}{{ $bg = "bg_yellow" }}
+{{-   end }}
+    {{ $h }}*) printf "\033]11;%s\007" "{{ index $.colours $bg }}" ;;
+{{- end }}
+    *) printf "\033]11;%s\007" "{{ .colours.bg_purple }}" ;;
+  esac
+
   command ssh "$@"
   # When disconnected, your local precmd (set_kitty_bg) will automatically run and restore your local color!
 }
@@ -235,11 +251,15 @@ export PATH="$PATH:$HOME/.local/bin:/var/lib/snapd/snap/bin:/opt/resolve/bin"
 
 # Dynamically set Kitty background color based on Chezmoi host mapping
 set_kitty_bg() {
+{{- if has .chezmoi.hostname .root_hosts }}
+  printf "\033]11;%s\007" "{{ index .colours $kitty_bg_color }}"
+{{- else }}
   if [[ $EUID -eq 0 ]]; then
     printf "\033]11;%s\007" "{{ .colours.bg_red }}"
   else
     printf "\033]11;%s\007" "{{ index .colours $kitty_bg_color }}"
   fi
+{{- end }}
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd set_kitty_bg

@@ -1,0 +1,15 @@
+{{- $tokenPath := joinPath .chezmoi.homeDir ".secrets" "hass_token" -}}
+{
+  "mcpServers": {
+    "homeassistant": {
+      "command": "uvx",
+      "args": [
+        "homeassistant-mcp"
+      ],
+      "env": {
+        "HASS_HOST": "http://homeassistant:80",
+        "HASS_TOKEN": "{{ if stat $tokenPath }}{{ include $tokenPath | trim }}{{ end }}"
+      }
+    }
+  }
+}

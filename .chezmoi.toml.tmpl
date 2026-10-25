@@ -1,0 +1,7 @@
+[edit]
+    command = "micro"
+
+{{ if eq .chezmoi.hostname "adam-laptop" }}
+[apply]
+    interactive = true
+{{ end }}

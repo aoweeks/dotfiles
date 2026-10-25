@@ -12,6 +12,7 @@
 .config/rio
 .config/systemd
 .config/VSCodium
+.gemini
 dot_local
 Projects
 {{ end }}
@@ -25,3 +26,8 @@ Projects
 .config/thunderbird/cxwntatu.default-release
 
 .config/kitty/current-theme.conf
+
+# Never track SSH private keys or known_hosts
+.ssh/id_*
+.ssh/known_hosts*
+

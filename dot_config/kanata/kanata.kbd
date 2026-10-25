@@ -15,7 +15,7 @@
 (defalias
   cap (tap-hold 200 200 pause lmet)
   lsf (tap-hold 200 200 slck lsft)
-  rag (tap-hold 200 200 ssrq ralt)
+  rag (tap-hold 200 200 C-S-esc ralt)
   sup (multi f13 (on-release tap-vkey slow_release))
   cop (tap-hold 200 200 lmet (multi lctl lsft lalt lmet))
 )

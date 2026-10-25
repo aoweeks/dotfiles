@@ -1,3 +1,11 @@
+root_hosts = [
+  "homeserver",
+  "parents-server",
+  "homeassistant",
+  "flint",
+  "router"
+]
+
 [colours]
 fg = "#D3C6AA"
 red = "#E67E80"
@@ -31,5 +39,10 @@ bg_visual = "#4C3743"
 "adam-laptop" = "grey_0"
 "homeserver" = "yellow"
 "docker-vm" = "green"
+"homeassistant" = "orange"
+"flint" = "purple"
+"router" = "purple"
 "parents-server" = "aqua"
 "parents-docker-vm" = "blue"
+
+
