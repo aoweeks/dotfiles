@@ -13,12 +13,21 @@ WATERSTONES_AUTH_PASS="user1"
 WATERSTONES_ZONE="waterstones"
 WATERSTONES_REDIR_URL="http://wifi.waterstones.com"
 
-# Returns 0 if portal is active (needs auth), 1 if internet is working.
+# Returns 0 if portal is active (needs auth), 1 if internet is working,
+# 2 if the network timed out / dropped packets (not a portal problem).
 # Uses the Microsoft connecttest URL rather than the portal page itself,
 # because the Aruba portal at 192.168.1.1 always serves the login HTML
 # regardless of auth status (auth works by MAC whitelisting).
 profile_is_portal_active() {
-    ! check_internet_generic
+    local status=0
+    check_internet_generic || status=$?
+    if [[ "${status}" -eq 0 ]]; then
+        return 1 # Internet is working (no portal)
+    elif [[ "${status}" -eq 1 ]]; then
+        return 0 # Portal is intercepting
+    else
+        return 2 # Timeout / packet loss
+    fi
 }
 
 profile_authenticate() {
