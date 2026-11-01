@@ -3,11 +3,11 @@ local home = os.getenv("HOME")
 
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
-hl.config({
-    exec_once = {
-        "[workspace special:communication silent] kitty --class nchat -e nchat",
-    },
+hl.on("hyprland.start", function()
+    hl.exec_cmd("[workspace special:communication silent] kitty --class nchat -e nchat")
+end)
 
+hl.config({
     group = {
         auto_group = false,
     },
