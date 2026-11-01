@@ -7,6 +7,10 @@ hl.config({
     exec_once = {
         "[workspace special:communication silent] kitty --class nchat -e nchat",
     },
+
+    group = {
+        auto_group = false,
+    },
     
     input = {
         kb_layout   = "gb",
