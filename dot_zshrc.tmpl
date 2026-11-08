@@ -195,6 +195,8 @@ export BAT_THEME="Everforest_Dark"
 export MANPAGER="bat -l man -p --paging=always --theme='Monokai Extended'"
 
 
+# Prepend ~/.zfunc to fpath so Zsh searches it for completion functions
+fpath=(~/.zfunc $fpath)
 # Load completions
 autoload -Uz compinit && compinit
 

@@ -186,7 +186,7 @@ main() {
             consecutive_failures=0
             failure_notified=0
             last_connected_ssid=""
-            sleep "${CHECK_INTERVAL}"
+            sleep 1
             continue
         fi
 
@@ -236,7 +236,7 @@ main() {
             sig_desc="$(classify_signal "${sig:-0}")"
             log "[${PROFILE_NAME}] Internet check failed (${consecutive_failures} consecutive, signal: ${sig_desc})"
 
-            if [[ "${consecutive_failures}" -ge 2 ]]; then
+            if [[ "${consecutive_failures}" -ge 1 ]]; then
                 if attempt_reconnect_for_profile "${PROFILE_NAME}" "${failure_notified}"; then
                     # Reconnect succeeded
                     consecutive_failures=0
