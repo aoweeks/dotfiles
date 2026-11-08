@@ -1,0 +1,214 @@
+#!/usr/bin/env python3
+"""
+Dock-Soundbar Sync Tool & Daemon
+Monitors Belkin Thunderbolt 4 Dock USB connection state and automatically
+connects/disconnects the Samsung Soundbar via Bluetooth.
+"""
+
+import sys
+import os
+import glob
+import time
+import subprocess
+import argparse
+import select
+from pathlib import Path
+
+BELKIN_VENDOR_ID = "050d"
+BELKIN_PRODUCT_ID = "006d"
+SOUNDBAR_MAC = "90:F1:AA:93:BB:D1"
+SERVICE_NAME = "dock-soundbar-sync.service"
+SERVICE_DIR = Path.home() / ".config" / "systemd" / "user"
+SERVICE_PATH = SERVICE_DIR / SERVICE_NAME
+
+SERVICE_TEMPLATE = f"""[Unit]
+Description=Belkin Dock & Samsung Soundbar Bluetooth Auto-Sync Daemon
+After=bluetooth.target default.target
+
+[Service]
+Type=simple
+ExecStart={Path.home()}/.local/bin/dock-soundbar-sync --daemon
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+"""
+
+def is_dock_connected() -> bool:
+    """Checks if Belkin Thunderbolt 4 Dock is connected via sysfs USB devices."""
+    for dev in glob.glob("/sys/bus/usb/devices/*"):
+        v_file = os.path.join(dev, "idVendor")
+        p_file = os.path.join(dev, "idProduct")
+        if os.path.exists(v_file) and os.path.exists(p_file):
+            try:
+                with open(v_file, "r") as f:
+                    v = f.read().strip()
+                with open(p_file, "r") as f:
+                    p = f.read().strip()
+                if v == BELKIN_VENDOR_ID and p == BELKIN_PRODUCT_ID:
+                    return True
+            except Exception:
+                continue
+    return False
+
+def is_soundbar_connected() -> bool:
+    """Checks if Samsung Soundbar is currently connected via bluetoothctl."""
+    try:
+        res = subprocess.run(
+            ["bluetoothctl", "info", SOUNDBAR_MAC],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        return "Connected: yes" in res.stdout
+    except Exception:
+        return False
+
+def connect_soundbar() -> bool:
+    """Connects to the soundbar."""
+    print(f"Connecting to Samsung Soundbar ({SOUNDBAR_MAC})...")
+    try:
+        res = subprocess.run(
+            ["bluetoothctl", "connect", SOUNDBAR_MAC],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if "Connection successful" in res.stdout or is_soundbar_connected():
+            print("Successfully connected to Samsung Soundbar.")
+            return True
+        else:
+            print(f"Connection output: {res.stdout.strip()}")
+            return False
+    except Exception as e:
+        print(f"Failed to connect to soundbar: {e}")
+        return False
+
+def disconnect_soundbar() -> bool:
+    """Disconnects from the soundbar."""
+    print(f"Disconnecting from Samsung Soundbar ({SOUNDBAR_MAC})...")
+    try:
+        res = subprocess.run(
+            ["bluetoothctl", "disconnect", SOUNDBAR_MAC],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        print("Disconnected from Samsung Soundbar.")
+        return True
+    except Exception as e:
+        print(f"Failed to disconnect from soundbar: {e}")
+        return False
+
+def sync_state():
+    """Evaluates current dock state and updates soundbar connection."""
+    dock = is_dock_connected()
+    soundbar = is_soundbar_connected()
+    print(f"[Sync] Dock connected: {dock} | Soundbar connected: {soundbar}")
+
+    if dock and not soundbar:
+        print("[Sync] Dock is connected but soundbar is not. Connecting...")
+        connect_soundbar()
+    elif not dock and soundbar:
+        print("[Sync] Dock is disconnected but soundbar is connected. Disconnecting...")
+        disconnect_soundbar()
+    else:
+        print("[Sync] State is already in sync.")
+
+def run_daemon():
+    """Runs real-time udev event monitor loop with debouncing."""
+    print("Starting Dock-Soundbar Auto-Sync Daemon...")
+    sync_state()
+
+    proc = subprocess.Popen(
+        ["udevadm", "monitor", "--udev", "--subsystem-match=usb"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        bufsize=1
+    )
+
+    last_event_time = 0.0
+    debounce_seconds = 1.0
+    pending_sync = False
+
+    try:
+        while True:
+            r, _, _ = select.select([proc.stdout], [], [], 0.5)
+            if r:
+                line = proc.stdout.readline()
+                if line:
+                    last_event_time = time.time()
+                    pending_sync = True
+
+            if pending_sync and (time.time() - last_event_time) >= debounce_seconds:
+                print("USB event detected & settled. Running sync...")
+                sync_state()
+                pending_sync = False
+
+    except KeyboardInterrupt:
+        print("Daemon stopped by user.")
+    finally:
+        proc.terminate()
+
+def install_service():
+    """Installs systemd user service."""
+    SERVICE_DIR.mkdir(parents=True, exist_ok=True)
+    with open(SERVICE_PATH, "w") as f:
+        f.write(SERVICE_TEMPLATE)
+    print(f"Written service file: {SERVICE_PATH}")
+    subprocess.run(["systemctl", "--user", "daemon-reload"], check=True)
+    subprocess.run(["systemctl", "--user", "enable", "--now", SERVICE_NAME], check=True)
+    print(f"Service {SERVICE_NAME} installed, enabled, and started.")
+
+def uninstall_service():
+    """Uninstalls systemd user service."""
+    subprocess.run(["systemctl", "--user", "disable", "--now", SERVICE_NAME], check=False)
+    if SERVICE_PATH.exists():
+        SERVICE_PATH.unlink()
+        print(f"Removed service file: {SERVICE_PATH}")
+    subprocess.run(["systemctl", "--user", "daemon-reload"], check=False)
+    print(f"Service {SERVICE_NAME} uninstalled.")
+
+def print_status():
+    """Prints current status of dock, soundbar, and systemd service."""
+    dock = is_dock_connected()
+    soundbar = is_soundbar_connected()
+    svc_res = subprocess.run(
+        ["systemctl", "--user", "is-active", SERVICE_NAME],
+        capture_output=True,
+        text=True
+    )
+    svc_status = svc_res.stdout.strip()
+    print("=== Dock-Soundbar Auto-Sync Status ===")
+    print(f"Belkin TB4 Dock Connected: {'YES' if dock else 'NO'} (050d:006d)")
+    print(f"Samsung Soundbar Connected: {'YES' if soundbar else 'NO'} ({SOUNDBAR_MAC})")
+    print(f"Background Service ({SERVICE_NAME}): {svc_status}")
+
+def main():
+    parser = argparse.ArgumentParser(description="Belkin Dock & Samsung Soundbar Bluetooth Sync Utility")
+    parser.add_argument("--daemon", action="store_true", help="Run in background daemon mode listening to udev events")
+    parser.add_argument("command", nargs="?", choices=["status", "sync", "connect", "disconnect", "install", "uninstall"],
+                        default="status", help="Command to execute (default: status)")
+    args = parser.parse_args()
+
+    if args.daemon:
+        run_daemon()
+        return
+
+    if args.command == "status":
+        print_status()
+    elif args.command == "sync":
+        sync_state()
+    elif args.command == "connect":
+        connect_soundbar()
+    elif args.command == "disconnect":
+        disconnect_soundbar()
+    elif args.command == "install":
+        install_service()
+    elif args.command == "uninstall":
+        uninstall_service()
+
+if __name__ == "__main__":
+    main()
