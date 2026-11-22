@@ -47,7 +47,7 @@ hl.bind(launchHere .. " + down", hl.dsp.window.move({ workspace = "+1" }), { loc
 
 
 -- Pointer Speed (F13 to slow down, Shift+F13 to restore)
--- Kanata natively sends F13 on press, and Shift+F13 on physical release, 
+-- Kanata and ZMK natively send F13 on press, and Shift+F13 on physical release, 
 -- bypassing Hyprland's bindr suppression completely!
 local f13_mods = {
     "", "CTRL + ", "ALT + ", "SUPER + ",
@@ -59,7 +59,7 @@ for _, mod in ipairs(f13_mods) do
     -- Slow down cursor when F13 is pressed (Kanata hold)
     -- Key repeat speed is handled by the caelestia-repeat daemon, not Hyprland
     hl.bind(mod .. "F13", function()
-        hl.config({ input = { sensitivity = -2 } })
+        hl.config({ input = { sensitivity = -1.0 } })
     end)
     
     -- Restore cursor speed when Shift+F13 is received (Kanata release hook)

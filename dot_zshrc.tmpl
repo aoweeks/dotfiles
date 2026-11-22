@@ -9,6 +9,15 @@
 {{- else -}}
   {{- $kitty_bg_color = print "bg_" $host_color_name -}}
 {{- end -}}
+if [[ $EUID -eq 0 ]]; then
+  export HOME="/root"
+  export XDG_CONFIG_HOME="/root/.config"
+  export XDG_DATA_HOME="/root/.local/share"
+  export XDG_CACHE_HOME="/root/.cache"
+  export XDG_STATE_HOME="/root/.local/state"
+  export XDG_RUNTIME_DIR="/run/user/0"
+fi
+
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
 ALWAYS_SHOW_HIDDEN=("$HOME/.local/share/chezmoi" "$HOME/.config")
 
@@ -94,7 +103,7 @@ alias cb='xclip -selection clipboard'
 alias sshauth='eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/id_ed25519'
 
 function ollama() {
-  if [ -t 0 ]; then
+  if [ -t 0 && -t 1 ]; then
     docker exec -it ollama ollama "$@"
   else
     docker exec -i ollama ollama "$@"
@@ -179,11 +188,6 @@ function mkcd() { mkdir "$1"; cd "$1" }
 export EDITOR="/usr/bin/micro"
 export MICRO_TRUECOLOR=1
 
-if [[ $EUID -eq 0 ]]; then
-    export XDG_CACHE_HOME="/root/.cache"
-    export HOME="/root"
-fi
-
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --exclude .git --ignore-file ~/.gitignore'
 # fzf uses bg:-1 to inherit the terminal's dynamic background color perfectly
@@ -212,7 +216,9 @@ if [[ -z "$SSH_CONNECTION" ]]; then
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
 fi
 
-eval "$(sheldon source)"
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml" ]]; then
+  eval "$(sheldon source)"
+fi
 
 eval "$(zoxide init zsh)"
 
@@ -274,3 +280,5 @@ set_kitty_bg() {
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd set_kitty_bg
+# Trigger immediately on shell startup so su/subshells take effect before prompt
+set_kitty_bg
