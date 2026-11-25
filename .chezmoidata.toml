@@ -1,9 +1,12 @@
 root_hosts = [
   "homeserver",
-  "parents-server",
   "homeassistant",
-  "flint",
   "router"
+]
+
+no_history_hosts = [
+  "public-docker",
+  "dmz-reverse-proxy"
 ]
 
 [colours]
@@ -39,10 +42,8 @@ bg_visual = "#4C3743"
 "adam-laptop" = "grey_0"
 "homeserver" = "yellow"
 "docker-vm" = "green"
-"homeassistant" = "orange"
-"flint" = "purple"
+"public-docker" = "blue"
+"dmz-reverse-proxy" = "orange"
+"homeassistant" = "yellow"
 "router" = "purple"
 "parents-server" = "aqua"
-"parents-docker-vm" = "blue"
-
-

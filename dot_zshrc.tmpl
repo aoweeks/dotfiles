@@ -22,6 +22,11 @@ export PATH="$PATH:$HOME/.cargo/bin:$HOME/applications/"
 ALWAYS_SHOW_HIDDEN=("$HOME/.local/share/chezmoi" "$HOME/.config")
 
 # History
+{{- if has .chezmoi.hostname .no_history_hosts }}
+HISTSIZE=0
+SAVEHIST=0
+unset HISTFILE
+{{- else }}
 HISTSIZE=100000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
@@ -35,6 +40,7 @@ setopt hist_ignore_dups
 setopt hist_find_no_dups
 setopt hist_reduce_blanks
 setopt extended_history
+{{- end }}
 
 # ### Aliases ###
 
@@ -205,22 +211,22 @@ fpath=(~/.zfunc $fpath)
 autoload -Uz compinit && compinit
 
 
-eval "$(thefuck --alias fuck)"
-eval "$(dircolors -b ~/.dircolors)"
-eval "$(atuin init zsh)"
-eval "$(starship init zsh)"
-eval "$(fzf --zsh)"
+(( $+commands[thefuck] )) && eval "$(thefuck --alias fuck)"
+[ -f ~/.dircolors ] && eval "$(dircolors -b ~/.dircolors)"
+(( $+commands[atuin] )) && eval "$(atuin init zsh)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[fzf] )) && eval "$(fzf --zsh)"
 
 # SSH Agent (systemd socket-activated)
 if [[ -z "$SSH_CONNECTION" ]]; then
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
 fi
 
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml" ]]; then
+if (( $+commands[sheldon] )) && [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml" ]]; then
   eval "$(sheldon source)"
 fi
 
-eval "$(zoxide init zsh)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
 # Configure the zsh-edit plugin (which provides subword/CamelCase navigation)
 # Setting word-chars to empty means it stops at ALL punctuation marks (like / - . _)
