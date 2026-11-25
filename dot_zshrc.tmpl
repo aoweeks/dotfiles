@@ -77,14 +77,14 @@ done
 alias grep='grep --color=always'
 alias cat='bat --color=always'
 alias feline='\cat'
-alias tail='tspin'
+(( $+commands[tspin] )) && alias tail='tspin'
 alias zi='__zoxide_zi'
 
 alias jqu='jaq'
 alias calc="noglob qalc -c $*"
 
 alias gc='git commit -am'
-alias fuckyeah='thefuck --yeah'
+(( $+commands[thefuck] )) && alias fuckyeah='thefuck --yeah'
 
 alias mc='micro'
 
@@ -104,7 +104,7 @@ alias newmac='(
 	sudo ip link set wlan0 up
 )'
 
-alias cb='xclip -selection clipboard'
+(( $+commands[xclip] )) && alias cb='xclip -selection clipboard'
 
 alias sshauth='eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/id_ed25519'
 
